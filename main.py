@@ -9,8 +9,11 @@ from datetime import datetime
 # Assuming log date format is like 'YYYY-MM-DD HH:MM:SS'
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+def get_log_files():
+    return glob.glob('/var/log/*.log')
+
 def query_syslogs(pattern, date_pattern=None):
-    log_files = glob.glob('/var/log/*.log')
+    log_files = get_log_files()
     if not log_files:
         print("No log files found in /var/log/")
         return
@@ -104,16 +107,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# Example usage
-if __name__ == "__main__":
-    logs = [
-        {'timestamp': '2023-10-01 12:00:00', 'level': 'ERROR', 'message': 'Disk space low'},
-        {'timestamp': '2023-10-01', 'level': 'INFO', 'message': 'System rebooted'}
-    ]
-
-    filtered_logs = filter_logs(logs, 'WARNING')
-    keyword_logs = search_logs(logs, 'Disk')
-    for log in logs:
-        log['parsed_timestamp'] = parse_timestamp(log['timestamp'])
-    alert_on_pattern(logs, 'Disk space low')
